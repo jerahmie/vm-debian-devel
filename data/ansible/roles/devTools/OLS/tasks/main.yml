@@ -1,0 +1,25 @@
+---
+# Download and install OLS
+- name: Check if OLS exists 
+  stat: path=/usr/local/ols-0.9.7.2
+  register: check_ols_path
+
+- name: Create temporary directory
+  command: mktemp -d
+  register: tempdir
+  when: check_ols_path.stat.exists == false
+
+- name: Download OLS
+  get_url: url='https://www.lxtreme.nl/ols/ols-0.9.7.2-full.tar.gz' dest={{ tempdir.stdout }} validate_certs=no
+  when: check_ols_path.stat.exists == false
+
+- name: Extract OLS to /usr/local
+  command: tar xf {{ tempdir.stdout }}/ols-0.9.7.2-full.tar.gz -C /usr/local
+  when: check_ols_path.stat.exists == false
+
+- file: path=/usr/local/ols-0.9.7.2 group=vagrant mode=775
+
+- name: Check for symlink to /usr/local/ols-0.9.7.2/run.sh
+  command: ln -s /usr/local/ols-0.9.7.2/run.sh /usr/local/bin/run_ols.sh
+  when: check_ols_path.stat.exists == false
+

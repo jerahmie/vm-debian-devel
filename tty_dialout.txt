@@ -1,0 +1,6 @@
+add vagrant to /etc/group:
+	tty:...:vagrant
+ 	dialout:...:vagrant
+$ sudo usermod -aG tty vagrant
+$ sudo usermod -aG dialout vagrant
+

@@ -1,0 +1,41 @@
+---
+# Set up the base box
+
+- name: set timezone
+  copy: src=timezone
+    dest=/etc/timezone
+    owner=root
+    group=root
+    mode=0644
+  when: ansible_os_family == "Debian"
+
+- name: GRUB - Disable infinite fail timeout (/etc/default/grub)
+  lineinfile: dest=/etc/default/grub
+              regexp="GRUB_RECORDFAIL_TIMEOUT="
+              line="GRUB_RECORDFAIL_TIMEOUT=0"
+
+- name: GRUB - Disable infinite fail timeout (/etc/grub.d/00_header)
+  lineinfile: dest=/etc/grub.d/00_header
+              create=no
+              regexp=" set timeout=[^\$]"
+              line=" set timeout=0"
+
+- name: Locale - Set LC_ALL (en_US.UTF-8)
+  lineinfile: dest=/etc/default/locale
+              create=no
+              regexp="LC_ALL="
+              line='LC_ALL="en_US.UTF-8"'
+
+- name: Locale - Set LANG (en_US.UTF-8)
+  lineinfile: dest=/etc/default/locale
+              create=no
+              regexp="ANG="
+              line='LANG="en_US.UTF-8"'
+
+- name: Ansible cron job
+  cron: name="Ansible reprovision"
+        job="/usr/bin/ansible-reprovision"
+        special_time=daily
+
+- include: setup_emacs.yml
+- include: setup_shell.yml

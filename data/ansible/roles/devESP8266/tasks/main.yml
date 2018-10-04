@@ -1,0 +1,38 @@
+---
+# This playbook will setup the ESP8266 development environment
+
+- name: Install Python serial port access module
+  apt: name=python-serial state=latest
+  tags: python
+
+- name: Install libexpat XML parsing development libraries
+  apt: name=libexpat1-dev state=latest
+  tags: dev-libraries
+
+- name: Check if esp build directory exists
+  stat: path=/home/vagrant/build
+  register: check_esp_path
+
+- name: Create build directory for ESP8266 SDK, if it doesn't exist
+  file: path=/home/vagrant/build state=directory owner=vagrant group=vagrant
+  when: check_esp_path.stat.exists == false
+
+- name: Git clone esp-open-sdk
+  git: repo=https://github.com/pfalcon/esp-open-sdk.git
+       dest=/home/vagrant/build/esp-open-sdk
+       recursive=yes
+
+- name: Change permissions on esp-open-sdk build directory
+  file: path=/home/vagrant/build/esp-open-sdk  owner=vagrant group=vagrant recurse=yes
+
+#- name: Running "make" for esp-open-sdk
+#  command: '"{{ item }}"
+#           chdir=/home/vagrant/build/esp-open-sdk'
+#  with_items:
+#    - make STANDALONE=y
+#  environment: 
+#    LD_LIBRARY_PATH: "''"
+#    LIBRARY_PATH: "''"
+
+- name: Update path to include xtensa-lx106-elf/bin
+  lineinfile: dest=/home/vagrant/.profile regexp='^export\sPATH$' line='PATH="/home/vagrant/build/esp-open-sdk/xtensa-lx106-elf/bin:$PATH"\n\n'

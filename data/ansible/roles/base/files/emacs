@@ -1,0 +1,5 @@
+;; Disable emacs menu bar
+(menu-bar-mode -1)
+
+;; Add local lisp folder to load-path
+(setq load-path (append load-path (list "~/elisp")))

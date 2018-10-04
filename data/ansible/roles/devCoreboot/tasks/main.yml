@@ -1,0 +1,7 @@
+---
+# This playbook will set up development tools required specifically for
+# Coreboot 
+
+- name: Install iasl
+  apt: name=iasl state=latest
+  tags: compilers

@@ -1,0 +1,12 @@
+---
+# debian provisioning playbook
+- hosts: all
+  sudo: yes
+  roles:
+    - base
+    - devEnv
+    - devAvr
+    - devAvr/simulAvr
+    #- devTools/OLS
+    #- devCoreboot
+    - devESP8266

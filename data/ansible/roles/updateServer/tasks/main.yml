@@ -1,0 +1,10 @@
+---
+# update the apt server
+- name: Update apt
+  sudo: true
+  apt: update_cache=yes
+
+# upgrade the system
+- name: Upgrade apt
+  sudo: true
+  apt: upgrade=full
