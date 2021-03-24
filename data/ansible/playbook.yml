@@ -1,12 +1,15 @@
 ---
 # debian provisioning playbook
-- hosts: all
-  sudo: yes
+- hosts: localhost
+  become: yes
   roles:
     - base
     - devEnv
-    - devAvr
-    - devAvr/simulAvr
+    #- devAvr
+    #- devAvr/simulAvr
     #- devTools/OLS
     #- devCoreboot
-    - devESP8266
+    #- devESP8266
+    #- devYosys
+    - devSTM32f103
+

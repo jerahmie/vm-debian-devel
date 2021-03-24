@@ -89,10 +89,6 @@
   apt: name=binutils-dev state=latest
   tags: dev-tools
 
-- name: Install java 1.7 runtime 
-  apt: name=openjdk-7-jre state=latest
-  tags: dev
-
 - name: Install python
   apt: name=python state=latest
   tags: python
